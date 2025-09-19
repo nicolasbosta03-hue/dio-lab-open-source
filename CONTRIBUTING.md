@@ -1,4 +1,106 @@
-<h1>
+--// PAINEL DO NT (Base: PainelAdminNickHub)
+--// Dono: nwndnz120122
+
+if not _G.Permissoes then _G.Permissoes = {} end
+local Dono = "nwndnz120122"
+
+local function TemPermissao(player)
+    if player.Name == Dono then
+        return true
+    end
+    return _G.Permissoes[player.UserId] == true
+end
+
+-- Funções para dar e remover permissão
+local function DarPermissao(userId)
+    _G.Permissoes[userId] = true
+end
+
+local function RemoverPermissao(userId)
+    _G.Permissoes[userId] = nil
+end
+
+-- Carrega painel original
+loadstring(game:HttpGet("https://raw.githubusercontent.com/nickainzn/PainelAdm.lua/main/PainelAdminNickHub", true))()
+
+task.wait(2)
+
+-- Localiza a UI principal
+local ScreenGui = game:GetService("CoreGui"):FindFirstChild("PAINEL") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("PAINEL")
+if ScreenGui then
+    ScreenGui.Name = "PAINEL DO NT" -- muda o nome
+
+    ----------------------------------------
+    -- Aba Verificação
+    ----------------------------------------
+    local AbaVerificacao = Instance.new("Frame")
+    AbaVerificacao.Name = "AbaVerificacao"
+    AbaVerificacao.Size = UDim2.new(0, 300, 0, 200)
+    AbaVerificacao.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    AbaVerificacao.Position = UDim2.new(0, 320, 0, 50)
+    AbaVerificacao.Visible = true
+    AbaVerificacao.Parent = ScreenGui
+
+    local TextoVerif = Instance.new("TextLabel")
+    TextoVerif.Size = UDim2.new(1, 0, 0, 40)
+    TextoVerif.Text = "Aba de Verificação"
+    TextoVerif.TextColor3 = Color3.fromRGB(255,255,255)
+    TextoVerif.BackgroundTransparency = 1
+    TextoVerif.Parent = AbaVerificacao
+
+    ----------------------------------------
+    -- Aba Dono (só aparece pro dono)
+    ----------------------------------------
+    local AbaDono = Instance.new("Frame")
+    AbaDono.Name = "AbaDono"
+    AbaDono.Size = UDim2.new(0, 300, 0, 200)
+    AbaDono.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    AbaDono.Position = UDim2.new(0, 640, 0, 50)
+    AbaDono.Visible = false
+    AbaDono.Parent = ScreenGui
+
+    -- Caixa de Texto para digitar o nome
+    local CaixaTexto = Instance.new("TextBox")
+    CaixaTexto.Size = UDim2.new(0, 200, 0, 30)
+    CaixaTexto.Position = UDim2.new(0, 50, 0, 10)
+    CaixaTexto.PlaceholderText = "Digite o nome do player"
+    CaixaTexto.Parent = AbaDono
+
+    -- Botão Dar Permissão
+    local BtnDar = Instance.new("TextButton")
+    BtnDar.Size = UDim2.new(0, 200, 0, 40)
+    BtnDar.Position = UDim2.new(0, 50, 0, 50)
+    BtnDar.Text = "Dar Permissão"
+    BtnDar.Parent = AbaDono
+    BtnDar.MouseButton1Click:Connect(function()
+        local nome = CaixaTexto.Text
+        local alvo = game.Players:FindFirstChild(nome)
+        if alvo then
+            DarPermissao(alvo.UserId)
+            print("Permissão dada para " .. alvo.Name)
+        end
+    end)
+
+    -- Botão Remover Permissão
+    local BtnRemover = Instance.new("TextButton")
+    BtnRemover.Size = UDim2.new(0, 200, 0, 40)
+    BtnRemover.Position = UDim2.new(0, 50, 0, 100)
+    BtnRemover.Text = "Remover Permissão"
+    BtnRemover.Parent = AbaDono
+    BtnRemover.MouseButton1Click:Connect(function()
+        local nome = CaixaTexto.Text
+        local alvo = game.Players:FindFirstChild(nome)
+        if alvo then
+            RemoverPermissao(alvo.UserId)
+            print("Permissão removida de " .. alvo.Name)
+        end
+    end)
+
+    -- Exibir aba só pro dono
+    if game.Players.LocalPlayer.Name == Dono then
+        AbaDono.Visible = true
+    end
+end<h1>
     <a href="https://www.dio.me/">
      <img align="center" width="40px" src="https://hermes.digitalinnovation.one/assets/diome/logo-minimized.png"></a>
     <span> Guia de Contribuição</span>
